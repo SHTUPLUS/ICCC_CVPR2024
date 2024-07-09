@@ -1,0 +1,90 @@
+ # Copyright (c) 2022, salesforce.com, inc.
+ # All rights reserved.
+ # SPDX-License-Identifier: BSD-3-Clause
+ # For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+
+model:
+  arch: blip2_opt
+  load_pretrained: True
+  freeze_vit: True
+
+  model_type: pretrain_opt6.7b
+  opt_model: cache/ckpts/opt6.7b
+  # opt_model: "facebook/opt-6.7b"
+
+  pretrained: "cache/ckpts/blip2_pretrained_opt6.7b.pth"
+  # pretrained: "https://storage.googleapis.com/sfr-vision-language-research/LAVIS/models/BLIP2/blip2_pretrained_opt6.7b.pth"
+
+  max_txt_len: 128
+
+
+datasets:
+  coco_caption_role_rep_swap:
+    vis_processor:
+        train:
+          name: "blip2_image_train"
+          image_size: 224
+    text_processor:
+        train:
+          name: "blip_caption_new"
+    build_info:
+        images:
+          storage: '/public/home/lirj2/projects/LAVIS_GITM/data/coco/images'
+        aug_ratio: 0.3
+        swap_ratio: 0.1
+        prompt_set: 
+          - ""
+        aug_prompt_set: 
+          - "Check the caption"
+  vg_caption_role_rep_swap: # name of the dataset builder
+    vis_processor:
+        train:
+          name: "blip2_image_train"
+          image_size: 224
+    text_processor:
+        train:
+          name: "blip_caption_new"
+    build_info:
+        images:
+          storage: '/public/home/lirj2/projects/LAVIS_GITM/data/vg/images'
+        aug_ratio: 0.3
+        swap_ratio: 0.1
+
+        prompt_set: 
+          - ""
+        aug_prompt_set: 
+          - "Check the caption"
+        
+
+run:
+  task: image_text_pretrain
+  runner: runner_iter
+  # optimizer
+  lr_sched: "linear_warmup_cosine_lr"
+  init_lr: 5e-6
+  min_lr: 0
+  warmup_lr: 1e-8
+  accum_grad_iters: 1
+
+  weight_decay: 0.05
+  max_iters: 17600
+  iters_per_inner_epoch: 2500
+
+  batch_size_train: 48
+  batch_size_eval: 48
+  num_workers: 4
+  warmup_steps: 500
+
+  seed: 42
+  output_dir: "output/BLIP2/Pretrain_stage2"
+
+  amp: False # training time triggered loss nan
+  resume_ckpt_path: null
+
+  evaluate: False 
+  train_splits: ["train"]
+
+  device: "cuda"
+  world_size: 1
+  dist_url: "env://"
+  distributed: True

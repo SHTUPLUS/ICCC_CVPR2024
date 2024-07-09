@@ -1,0 +1,45 @@
+ # Copyright (c) 2022, salesforce.com, inc.
+ # All rights reserved.
+ # SPDX-License-Identifier: BSD-3-Clause
+ # For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+
+model:
+  arch: vqa_opt2.7b
+  load_finetuned: False
+  # pretrained: "/public/home/lirj2/projects/LAVIS_GITM/lavis/output/BLIP2/Pretrain_stage2/2023080815551-with_vg_coco_rel_aug-no_pos_continue-train/checkpoint_6.pth"
+
+  pretrained: "/public/home/lirj2/projects/LAVIS_GITM/cache/ckpts/blip2_pretrained_opt2.7b.pth"
+  finetuned: ""
+
+  # vit encoder
+  vit_model: eva_clip_g
+  image_size: 364
+  drop_path_rate: 0
+  use_grad_checkpoint: False
+  vit_precision: "fp16"
+  freeze_vit: True
+
+  # Q-Former
+  num_query_token: 32
+
+  # OPT
+  opt_model: "/public/home/lirj2/projects/LAVIS_GITM/cache/ckpts/opt2.7B"
+
+  # generation configs
+  prompt: "Question: {} Answer:"
+  inference_method: "generate"
+
+
+preprocess:
+    vis_processor:
+        train:
+          name: "blip_image_train"
+          image_size: 364
+        eval:
+          name: "blip_image_eval"
+          image_size: 364
+    text_processor:
+        train:
+          name: "blip_caption"
+        eval:
+          name: "blip_caption"

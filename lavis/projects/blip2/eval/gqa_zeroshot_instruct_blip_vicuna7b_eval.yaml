@@ -1,0 +1,56 @@
+ # Copyright (c) 2022, salesforce.com, inc.
+ # All rights reserved.
+ # SPDX-License-Identifier: BSD-3-Clause
+ # For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+
+
+model:
+  arch: blip2_vicuna_instruct
+  model_type: vicuna7b
+
+  load_pretrained: True
+  pretrained: "/public/home/lirj2/projects/LAVIS_GITM/cache/ckpts/instruct_blip_vicuna7b_trimmed.pth"
+
+  prompt: "Question: {} Short answer in one word:"
+
+datasets:
+  gqa: # name of the dataset builder
+    type: balanced_val
+    # type: balanced_testdev
+    vis_processor:
+        eval:
+          name: "blip_image_eval"
+          image_size: 224
+    text_processor:
+        eval:
+          name: "blip_question"
+    build_info:
+        images:
+            storage: "data/GQA/images/"
+
+run:
+  task: gqa
+  # optimization-specific
+  batch_size_train: 32
+  batch_size_eval: 36
+  num_workers: 2
+
+  # inference-specific
+  max_len: 10
+  min_len: 1
+  num_beams: 5
+  inference_method: "generate"
+  prompt: "Question: {} Short answer in one word:"
+
+  seed: 42
+  output_dir: "output/BLIP2-instrut/GQA"
+
+  evaluate: True
+  test_splits: ["val"]
+  # test_splits: ["test"]
+
+  # distribution-specific
+  device: "cuda"
+  world_size: 1
+  dist_url: "env://"
+  distributed: True
