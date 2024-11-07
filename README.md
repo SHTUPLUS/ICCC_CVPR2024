@@ -61,16 +61,29 @@ python iccc_data_generation.py path/to/data/dir data_filename_without_suffix
 ```
 After parsing, ensure the data file path is updated with ICCC in configuration (`lavis/configs/datasets/coco/defaults_cap_iccc.yaml` for COCO and `lavis/configs/datasets/vg/defaults_cap_iccc.yaml` for Visual Genome).
 
+You can also download the processed data from https://huggingface.co/rj979797/ICCC_CVPR2024/tree/main.
+- COCO dataset:
+`coco_karpathy_train_cnter_nva.json`,
+`coco_karpathy_train_w_parsing_nva.json`
+- VG dataset:
+`vg_caption_cnter_nva.json`,
+`vg_caption_w_parsing_nva.json`
+
+
+
 ## Model Zoo
+
+The model weights can be downloaded from https://huggingface.co/rj979797/ICCC_CVPR2024/tree/main
+
 ###  BLIP-2 
 |                 |      |        |       |      |        |       |        |            |
 |-----------------|------|--------|-------|------|---------------|-------|--------|------------|
 |                 |      |        |       |      |   NoCaps|       |        |            |
 |         | GQA  | OK-VQA | VQAv2 | VSR  | BLUE@4 | SPICE | CIDERr | Checkpoint |
 | OPT2.7B         | 33.5 | 26.6   | 51.9  | 48.3 | 43.6          | 13.8  | 105.7  |            |
-| OPT2.7B w/ ICCC | 38.2 | 29.5   | 54.3  | 47.6 | 46.0          | 14.3  | 111.9  |            |
+| OPT2.7B w/ ICCC | 38.2 | 29.5   | 54.3  | 47.6 | 46.0          | 14.3  | 111.9  |  blip2-iccc-2.7B.pth          |
 | OPT6.7B         | 35.5 | 30.7   | 52.6  | 48.5 | 41.5          | 13.0  | 101.4  |            |
-| OPT6.7B w/ ICCC | 38.3 | 31.7   | 58.8  | 51.5 | 44.1          | 13.5  | 106.9  |            |
+| OPT6.7B w/ ICCC | 38.3 | 31.7   | 58.8  | 51.5 | 44.1          | 13.5  | 106.9  |   blip2-iccc-6.7B.pth         |
 
 ## Training and Evaluation
 
